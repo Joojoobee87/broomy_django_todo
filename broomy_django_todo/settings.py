@@ -13,6 +13,12 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import dj_database_url
 
+if os.environ.get('DEVELOPMENT'):
+    development = True
+else:
+    development = False
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,9 +30,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'vwf%u1coqeh_a@6&rwg_v05c)xf(cb_g&5xw6td^dite*iwnp6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = development #Debug will be True if development exists
 
-ALLOWED_HOSTS = [os.environ.get('HOSTNAME'), 'broomy-django-todo.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', os.environ.get('HOSTNAME'), 'broomy-django-todo.herokuapp.com']
 
 
 # Application definition
@@ -75,23 +81,18 @@ WSGI_APPLICATION = 'broomy_django_todo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
-#}
 
-if "DATABASE_URL" in os.environ:
-    DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
-else:
-    print("Database URL not found. Using SQLite instead")
+
+if development:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+else: 
+    DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
