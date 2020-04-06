@@ -26,7 +26,7 @@ SECRET_KEY = 'vwf%u1coqeh_a@6&rwg_v05c)xf(cb_g&5xw6td^dite*iwnp6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'broomy-django-todo.herokuapp.com']
 
 
 # Application definition
@@ -81,6 +81,17 @@ WSGI_APPLICATION = 'broomy_django_todo.wsgi.application'
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
 #}
+
+if "DATABASE_URL" in os.environ:
+    DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
+else:
+    print("Database URL not found. Using SQLite instead")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 DATABASES = {'default': dj_database_url.parse("postgres://hqxytjbtyghtel:870a6a143dce365cfb2a3fee1670fb9f7b8abf5cd4fed38a606d15be3c7a15db@ec2-46-137-84-173.eu-west-1.compute.amazonaws.com:5432/ddcpjq2k36ags2")}
 
